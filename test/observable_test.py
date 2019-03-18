@@ -18,7 +18,7 @@ class ObserableDojoTest(unittest.TestCase):
                 t.assertEqual(2, epochs)
 
         sub = Subscriber()
-        self.dojo.register('before_initialization', sub)
+        self.dojo.register('before_initialization', sub.update)
         self.dojo.train(2)
         
     def test_before_after_train_step(self):
@@ -35,8 +35,8 @@ class ObserableDojoTest(unittest.TestCase):
                 t.assertEqual(7788, loss_g)
                 t.assertEqual(8877, loss_d)
 
-        self.dojo.register('before_train_step', SubscriberBefore())
-        self.dojo.register('after_train_step', SubscriberAfter())
+        self.dojo.register('before_train_step', SubscriberBefore().update)
+        self.dojo.register('after_train_step', SubscriberAfter().update)
 
         self.dojo.train_on_batch(2, 1, 'XXXX')
 
@@ -48,8 +48,8 @@ class ObserableDojoTest(unittest.TestCase):
                 t.assertEqual(2, epoch)
                 t.assertEqual('dataset', dataset)
 
-        self.dojo.register('before_epoch', Subscriber())
-        self.dojo.register('after_epoch', Subscriber())
+        self.dojo.register('before_epoch', Subscriber().update)
+        self.dojo.register('after_epoch', Subscriber().update)
 
         self.dojo.train_epoch(2, dataset)
 

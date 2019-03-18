@@ -42,10 +42,6 @@ class ObservableDojo:
     def register(self, subject, observer):
         self.__subjects[subject].register(observer)
 
-
-
-
-
 class Subject:
 
     def __init__(self):
@@ -56,4 +52,4 @@ class Subject:
     
     def notify(self, *args, **kwargs):
         for observer in self.__observers:
-            observer.update(*args, **kwargs)
+            observer(*args, **kwargs)
