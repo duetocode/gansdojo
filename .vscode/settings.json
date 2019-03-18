@@ -1,0 +1,15 @@
+{
+    "python.pythonPath": "/usr/local/anaconda3/envs/tensorflow/bin/python",
+    "python.linting.pylintEnabled": true,
+    "python.unitTest.unittestArgs": [
+        "-v",
+        "-p",
+        "*_test.py"
+    ],
+    "python.unitTest.pyTestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.unittestEnabled": true,
+    "files.exclude": {
+        "**/__pycache__": true
+    }
+}
