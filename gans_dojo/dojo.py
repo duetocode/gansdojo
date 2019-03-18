@@ -68,8 +68,9 @@ class Dojo():
         assert actual_epochs is not None
 
         dataset = get(self.config.dataset)
-        for epoch in range(1, actual_epochs + 1):
-            self.train_epoch(epoch, dataset)
+        with tf.contrib.summary.always_record_summaries():
+            for epoch in range(1, actual_epochs + 1):
+                self.train_epoch(epoch, dataset)
 
     def run(self, batch_size=4):
         z = K.random_uniform((batch_size, self.config.input_dim))
