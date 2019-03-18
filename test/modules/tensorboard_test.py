@@ -3,8 +3,8 @@ import tensorflow as tf
 from  tempfile import TemporaryDirectory
 import os
 
-from .mock import MockDojo
-from gans_dojo.modules import TensorBoardLogger
+from .mock import MockObserableDojo
+from gansdojo.modules import TensorBoardLogger
 
 
 class TensorboardTest(unittest.TestCase):
@@ -17,7 +17,7 @@ class TensorboardTest(unittest.TestCase):
 
             self.assertTrue(os.path.exists(log_dir))
 
-            mock_dojo = MockDojo(self)
+            mock_dojo = MockObserableDojo(self)
             logger.setup(mock_dojo)
 
             mock_dojo.fire('after_train_step', tf.constant(10.20), tf.constant(30.40), 1, 20, None)

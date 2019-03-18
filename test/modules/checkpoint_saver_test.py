@@ -5,31 +5,26 @@ from tempfile import TemporaryDirectory
 import os
 
 from test.dojo_test import build_config
-from .mock import MockDojo
-from gans_dojo.modules import CheckpointSaver
+from .mock import MockObserableDojo
+from gansdojo.modules import CheckpointSaver
 
 class CheckpointSaverTest(unittest.TestCase):
     
     def setUp(self):
         # pylint: disable=no-member
         config = build_config()
-        dojo = MockDojo(self)
+        dojo = MockDojo(config)
 
-        dojo.generator = config.generator()
-        dojo.discriminator = config.discriminator()
-        dojo.optimizer_discriminator = config.optimizer_discriminator
-        dojo.optimizer_generator = config.optimizer_generator
-        
-        self.dojo = dojo
+        self.obserable = MockObserableDojo(self, dojo)
 
     def test(self):
         with TemporaryDirectory() as save_dir:
             saver = CheckpointSaver(save_dir)
 
-            saver.setup(self.dojo)
+            saver.setup(self.obserable)
 
             tf.train.get_or_create_global_step().assign(150)
-            self.dojo.fire('after_epoch', 12, None)
+            self.obserable.fire('after_epoch', 12, None)
             
             # Check the parent directory
             self.assertTrue(os.path.exists(save_dir))
@@ -51,7 +46,13 @@ def check(self, save_dir):
     self.assertTrue(os.path.exists(os.path.join(save_dir, 'checkpoint')))
 
 
+class MockDojo:
 
+    def __init__(self, config):
+        self.generator = config.generator()
+        self.discriminator = config.discriminator()
+        self.optimizer_discriminator = config.optimizer_discriminator
+        self.optimizer_generator = config.optimizer_generator
 
 
 

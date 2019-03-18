@@ -2,6 +2,8 @@ import tensorflow as tf
 import os
 import shutil
 
+from gansdojo import ObservableDojo
+
 class CheckpointSaver:
 
     def __init__(self, save_dir, remove_old_data=False, auto_restore_latest=False):
@@ -11,16 +13,15 @@ class CheckpointSaver:
         self.save_dir = save_dir
         self.auto_restore_lastest = auto_restore_latest
 
-    def setup(self, dojo):
+    def setup(self, observable:ObservableDojo):
         self.checkpoint_generator = tf.train.Checkpoint(
-            optimizer=dojo.optimizer_generator,
-            model=dojo.generator)
+            optimizer=observable.dojo.optimizer_generator,
+            model=observable.dojo.generator)
         self.checkpoint_discriminator = tf.train.Checkpoint(
-            optimizer=dojo.optimizer_discriminator,
-            model=dojo.discriminator)
+            optimizer=observable.dojo.optimizer_discriminator,
+            model=observable.dojo.discriminator)
 
-        dojo.register('after_epoch', self.save)
-        self._dojo = dojo
+        observable.register('after_epoch', self.save)
 
     def save(self, *args, **kwargs):
         # Create checkpoints

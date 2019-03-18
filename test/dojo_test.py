@@ -6,7 +6,7 @@ from tensorflow import keras
 from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras import layers, models, backend as K
 
-from gans_dojo import Dojo, Config
+from gansdojo import Dojo, Config
 
 class DojoTest(unittest.TestCase):
 

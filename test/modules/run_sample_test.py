@@ -1,13 +1,13 @@
 import unittest
 import tensorflow as tf
 
-from gans_dojo.modules import SampleRunner
-from .mock import MockDojo
+from gansdojo.modules import SampleRunner
+from .mock import MockObserableDojo
 
 class SampleRunnerTest(unittest.TestCase):
     
     def test(self):
-        dojo = MockDojo(self)
+        dojo = MockObserableDojo(self)
 
         runner = SampleRunner(50)
         runner.setup(dojo)

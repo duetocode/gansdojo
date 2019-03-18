@@ -1,5 +1,5 @@
 import unittest
-from gans_dojo.observable import ObservableDojo
+from gansdojo.observable import ObservableDojo
 
 class ObserableDojoTest(unittest.TestCase):
 

@@ -1,5 +1,13 @@
-class Config():
+from collections import namedtuple
 
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, kwargs[key])
+
+Config = namedtuple('Config', [
+        'training_ratio',
+        'input_dim',
+        'dataset',
+        'generator',
+        'discriminator',
+        'optimizer_discriminator',
+        'optimizer_generator',
+        'generator_loss_fn',
+        'discriminator_loss_fn'])
