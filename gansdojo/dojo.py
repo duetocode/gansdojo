@@ -48,9 +48,9 @@ class Dojo():
             logits_generated = self.discriminator(generated, training=True)
             logits_real = self.discriminator(batch, training=True)
 
-            loss_d = self.config.discriminator_loss_fn(logits_generated, logits_real, generated, batch)
+            loss_d = self.config.discriminator_loss_fn(logits_generated, logits_real, generated, batch, self.discriminator)
             if self.global_step.numpy() % self.config.training_ratio == 0:
-                loss_g = self.config.generator_loss_fn(logits_generated, logits_real, generated, batch)
+                loss_g = self.config.generator_loss_fn(logits_generated, logits_real, generated, batch, self.generator)
         
         _update(loss_d, self.discriminator, self.optimizer_discriminator, tape_discriminator)
         _update(loss_g, self.generator, self.optimizer_generator, tape_generator)
