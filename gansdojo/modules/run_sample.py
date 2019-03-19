@@ -15,5 +15,5 @@ class SampleRunner:
 
     def run(self, loss_d, loss_g, epoch, iteration, *args, **kwargs):
         generated = self._observable.run()
-        tf.contrib.summary.image('generated', K.concatenate(generated, axis=2))
+        tf.contrib.summary.image('generated', K.expand_dims(K.concatenate(generated, axis=1), axis=0))
         
