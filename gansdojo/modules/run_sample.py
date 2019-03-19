@@ -38,5 +38,6 @@ class SampleRunner:
 
     def run(self, loss_d, loss_g, epoch, iteration, *args, **kwargs):
         generated = self._observable.run()
+        generated = (generated + 1.0) / 2.0
         tf.contrib.summary.image('generated', K.expand_dims(K.concatenate(generated, axis=1), axis=0))
         
