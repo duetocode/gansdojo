@@ -14,6 +14,7 @@ class Dojo():
     def __init__(self, config):
         self.config = config
 
+        assert hasattr(config, 'batches_per_epoch')
         assert hasattr(config, 'training_ratio')
         assert hasattr(config, 'input_dim')
         assert hasattr(config, 'dataset')
@@ -58,9 +59,8 @@ class Dojo():
         return loss_g, loss_d
 
     def train_epoch(self, epoch, dataset):
-        for i, batch in enumerate(dataset):
+        for i, batch in enumerate(dataset.take(self.config.batches_per_epoch)):
             self.train_on_batch(epoch, i + 1, batch)
-
 
     def train(self, epochs=None):
         actual_epochs = epochs if epochs is not None else self.config.epochs

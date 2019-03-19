@@ -5,6 +5,7 @@ Config = namedtuple('Config', [
         'training_ratio',
         'input_dim',
         'dataset',
+        'batches_per_epoch',
         'generator',
         'discriminator',
         'optimizer_discriminator',

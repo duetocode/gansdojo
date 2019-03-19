@@ -13,9 +13,7 @@ class CheckpointSaverTest(unittest.TestCase):
     def setUp(self):
         # pylint: disable=no-member
         config = build_config()
-        dojo = MockDojo(config)
-
-        self.obserable = MockObserableDojo(self, dojo)
+        self.obserable = MockObserableDojo(self, config)
 
     def test(self):
         with TemporaryDirectory() as save_dir:
@@ -44,20 +42,4 @@ def check(self, save_dir):
     files = os.listdir(save_dir)
     self.assertEqual(3, len(files))
     self.assertTrue(os.path.exists(os.path.join(save_dir, 'checkpoint')))
-
-
-class MockDojo:
-
-    def __init__(self, config):
-        self.generator = config.generator()
-        self.discriminator = config.discriminator()
-        self.optimizer_discriminator = config.optimizer_discriminator
-        self.optimizer_generator = config.optimizer_generator
-
-
-
-        
-
-        
-
 

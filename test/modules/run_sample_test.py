@@ -3,11 +3,12 @@ import tensorflow as tf
 
 from gansdojo.modules import SampleRunner
 from .mock import MockObserableDojo
+from test.dojo_test import build_config
 
 class SampleRunnerTest(unittest.TestCase):
     
     def test(self):
-        dojo = MockObserableDojo(self)
+        dojo = MockObserableDojo(self, build_config())
 
         runner = SampleRunner(50)
         runner.setup(dojo)

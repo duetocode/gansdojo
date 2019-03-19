@@ -3,9 +3,12 @@ from tensorflow.keras import backend as K
 
 class MockObserableDojo:
 
-    def __init__(self, test_case:unittest.TestCase, dojo=None):
+    def __init__(self, test_case:unittest.TestCase, config):
         self.test_case = test_case
-        self.dojo = dojo
+        self.generator = config.generator()
+        self.discriminator = config.discriminator()
+        self.optimizer_generator = config.optimizer_generator
+        self.optimizer_discriminator = config.optimizer_discriminator
         self.handlers = {}
 
     def register(self, event_name, handler):

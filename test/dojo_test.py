@@ -22,13 +22,13 @@ def build_config() -> Config:
         training_ratio=1,
         input_dim=9,
         dataset=create_dataset,
+        batches_per_epoch=1,
         generator=build_generator,
         discriminator=build_discriminator,
         optimizer_discriminator=tf.train.AdamOptimizer(),
         optimizer_generator=tf.train.AdamOptimizer(),
         discriminator_loss_fn=compute_discriminator_loss,
-        generator_loss_fn=compute_generator_loss
-    )
+        generator_loss_fn=compute_generator_loss)
 
 def create_dataset() -> tf.data.Dataset:
     source = K.random_normal((20, 3, 3, 3))
