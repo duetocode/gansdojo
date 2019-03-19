@@ -1,15 +1,17 @@
 import unittest
 from gansdojo.observable import ObservableDojo
+from .dojo_test import build_config
+
+from tensorflow.keras import backend as K
 
 class ObserableDojoTest(unittest.TestCase):
 
     def setUp(self):
-        self.mockDojo = MockDojo()
-        self.dojo = ObservableDojo(self.mockDojo)
+        self.config = build_config()
+        self.dojo = ObservableDojo(self.config)
 
     def test_constructor(self):
         self.assertIsNotNone(self.dojo)
-        self.assertTrue(hasattr(self.dojo, 'dojo'))
 
     def test_before_initialization(self):
         t = self
@@ -23,35 +25,48 @@ class ObserableDojoTest(unittest.TestCase):
         
     def test_before_after_train_step(self):
         t = self
+        invoked_before, invoked_after = False, False
         class SubscriberBefore:
             def update(self, epoch, iteration, batch):
+                nonlocal invoked_before
                 t.assertEqual(2, epoch)
                 t.assertEqual(1, iteration)
-                t.assertEqual('XXXX', batch)
+                invoked_before = True
 
         class SubscriberAfter(SubscriberBefore):
             def update(self, loss_g, loss_d, epoch, iteration, batch):
+                nonlocal invoked_after
                 super(SubscriberAfter, self).update(epoch, iteration, batch)
-                t.assertEqual(7788, loss_g)
-                t.assertEqual(8877, loss_d)
-
+                t.assertIsNotNone(loss_g)
+                t.assertIsNotNone(loss_d)
+                invoked_after = True
+                
         self.dojo.register('before_train_step', SubscriberBefore().update)
         self.dojo.register('after_train_step', SubscriberAfter().update)
 
-        self.dojo.train_on_batch(2, 1, 'XXXX')
+        batch = K.random_normal([4, 3, 3, 3])
+        self.dojo.train_on_batch(2, 1, batch)
+
+        self.assertEqual(True, invoked_before)
+        self.assertEqual(True, invoked_after)
 
     def test_train_epoch(self):
         t = self
-        dataset = "dataset"
+
+        update_invoked = False
         class Subscriber:
             def update(self, epoch, dataset):
+                nonlocal update_invoked
                 t.assertEqual(2, epoch)
-                t.assertEqual('dataset', dataset)
+                t.assertIsNotNone(dataset)
+                update_invoked = True
 
         self.dojo.register('before_epoch', Subscriber().update)
         self.dojo.register('after_epoch', Subscriber().update)
 
-        self.dojo.train_epoch(2, dataset)
+        self.dojo.train_epoch(2, self.config.dataset())
+
+        self.assertEqual(True, update_invoked)
 
 
 class MockDojo:

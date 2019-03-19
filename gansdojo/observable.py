@@ -2,10 +2,9 @@ import tensorflow as tf
 
 from .dojo import Dojo
 
-class ObservableDojo:
-# pylint: disable=no-member
-    def __init__(self, dojo):
-        self.dojo = dojo
+class ObservableDojo(Dojo):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.__subjects = {}
         def add_subject(obj, name):
             value = Subject() 
@@ -21,7 +20,7 @@ class ObservableDojo:
         
         self.__subjects['before_train_step'].notify(*args, **kwargs) 
 
-        loss_g, loss_d = self.dojo.train_on_batch(*args, **kwargs)
+        loss_g, loss_d = super().train_on_batch(*args, **kwargs)
 
         self.__subjects['after_train_step'].notify(loss_g, loss_d, *args, **kwargs)
 
@@ -29,18 +28,16 @@ class ObservableDojo:
 
     def train_epoch(self, *args, **kwargs):
         self.__subjects['before_epoch'].notify(*args, **kwargs)
-        self.dojo.train_epoch(*args, **kwargs)
+        super().train_epoch(*args, **kwargs)
         self.__subjects['after_epoch'].notify(*args, **kwargs)
 
     def train(self, *args, **kwargs):
         self.__subjects['before_initialization'].notify(*args, **kwargs)
-        self.dojo.train(*args, **kwargs)
-
-    def run(self):
-        self.dojo.run()
+        super().train(*args, **kwargs)
 
     def register(self, subject, observer):
         self.__subjects[subject].register(observer)
+
 
 class Subject:
 
