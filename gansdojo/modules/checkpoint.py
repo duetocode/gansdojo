@@ -15,11 +15,11 @@ class CheckpointSaver:
 
     def setup(self, observable:ObservableDojo):
         self.checkpoint_generator = tf.train.Checkpoint(
-            optimizer=observable.dojo.optimizer_generator,
-            model=observable.dojo.generator)
+            optimizer=observable.optimizer_generator,
+            model=observable.generator)
         self.checkpoint_discriminator = tf.train.Checkpoint(
-            optimizer=observable.dojo.optimizer_discriminator,
-            model=observable.dojo.discriminator)
+            optimizer=observable.optimizer_discriminator,
+            model=observable.discriminator)
 
         observable.register('after_epoch', self.save)
 

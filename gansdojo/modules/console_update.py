@@ -11,7 +11,8 @@ class ConsoleUpdator:
     def after_batch_step(self, loss_g, loss_d, epoch, iteration, *args, **kwargs):
         speed = 1.0 / (time() - self.begin)
         global_step = tf.train.get_global_step().numpy()
-        print(f'\r{global_step} E:{epoch} I:{iteration} {speed:.2f} b/s G:{loss_g.numpy():.4e} D:{loss_d.numpy():.4e}')
+        print((f'\r{global_step} E:{epoch} I:{iteration} {speed:.2f} b/s '
+                f'G:{loss_g.numpy():.4e} D:{loss_d.numpy():.4e}'), end='')
 
     def setup(self, observable:ObservableDojo):
         observable.register('before_train_step', self.before_batch_step)
