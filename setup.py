@@ -21,15 +21,16 @@
 # SOFTWARE.
 # 
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 setup(
     name='gansdojo',
     version='0.1',
     description='Simple framework for training Generative Adversarial Networks.',
-    url='https://github.com:nova-zl504/gansdojo',
+    url='https://github.com/nova-zl504/gansdojo',
     author='Oliver',
     author_email='elvewyn@gmail.com',
     license='MIT',
-    packages=['gansdojo'],
+    install_requires=['tensorflow>=1.13.1', 'numpy>=1.9.1'],
+    packages=find_packages(exclude=['test']),
     zip_safe=False)
